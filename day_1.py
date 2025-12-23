@@ -12,14 +12,18 @@ class Input:
         self.num: int = num
 
 class DialState:
-    def __init__(self, curr_state: int = 0):
+    def __init__(self, curr_state: int = 0, num_zeros: int = 0):
         self.curr_state: int = curr_state
+        self.num_zeros: int = num_zeros
 
     def turn_dial(self, inp: Input):
         if inp.turn == Turn.RIGHT:
             self.curr_state += inp.num
         else:
             self.curr_state -= inp.num
+
+        if self.curr_state % 100 == 0:
+            self.num_zeros += 1
 
 def parse_inputs(inputs_str: str) -> list[Input]:
     lines = inputs_str.splitlines()
@@ -41,14 +45,10 @@ def main():
     inputs = parse_inputs(input_content)
     state = DialState(50)
 
-    num_of_zeros = 0
-
     for inp in inputs:
         state.turn_dial(inp)
-        if state.curr_state % 100 == 0:
-            num_of_zeros += 1
 
-    print(num_of_zeros)
+    print(state.num_zeros)
 
 if __name__ == '__main__':
     main()
